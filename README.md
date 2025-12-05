@@ -1,3 +1,3 @@
 # Código
 
-Usar todos los archivos y usar "live server" o similar para poder verlo de manera local.
+Una vez descomprimido, abrir en el navegador el index.html
