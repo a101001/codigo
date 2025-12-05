@@ -1,0 +1,153 @@
+/* ========================================= */
+/* 1. CONFIGURACION GLOBAL                   */
+/* ========================================= */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Tipografía "Mono" para números en tablas */
+table td {
+    font-family: 'Consolas', monospace;
+    font-size: 0.9rem;
+}
+
+/* Estilo para los inputs pequeños en el sidebar */
+.bg-dark input[type="number"] {
+    text-align: center;
+}
+
+.bg-dark input[placeholder] {
+    font-size: 0.75rem;
+}
+
+
+/* ========================================= */
+/* 2. INPUTS Y FORMULARIOS (MODO OSCURO)     */
+/* ========================================= */
+
+/* Inputs normales (fondo claro) */
+.form-control {
+    background-color: #f8f9fa;
+    border: 1px solid #ced4da;
+}
+
+/* Inputs oscuros (cuando están en el sidebar negro) */
+.bg-dark .form-control {
+    background-color: #495057;
+    border: 1px solid #6c757d;
+    color: white;
+}
+
+/* Estilo para el nuevo input de archivo (file) */
+.bg-dark input[type="file"] {
+    padding: 0.375rem 0.2rem;
+    /* Ajuste para que se vea mejor */
+    font-size: 0.8rem;
+    cursor: pointer;
+}
+
+
+/* Efecto al hacer clic en un input oscuro */
+.bg-dark .form-control:focus {
+    background-color: #495057;
+    border-color: #0d6efd;
+    color: white;
+    box-shadow: none;
+}
+
+/* ========================================= */
+/* 3. COLORES DE ESTADO (SEMÁFORO)           */
+/* ========================================= */
+
+/* Fondo Verde (Aprobado) */
+.aprobado-bg {
+    background-color: #d1e7dd !important;
+    color: #0f5132 !important;
+}
+
+/* Fondo Rojo (Rechazado) */
+.rechazado-bg {
+    background-color: #f8d7da !important;
+    color: #842029 !important;
+}
+
+/* Fila de tabla Roja (Error) */
+.fila-error {
+    background-color: #fff5f5 !important;
+    color: #dc3545;
+    font-weight: bold;
+}
+
+/* ========================================= */
+/* 4. SECCION DEL PERRO                      */
+/* ========================================= */
+
+/* CONTENEDOR PRINCIPAL DEL PERRO */
+.dog-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: auto;
+    padding-top: 20px;
+}
+
+/* Imagen pixelada */
+.dog-img {
+    width: 50px;
+    image-rendering: pixelated;
+    animation: bounce 1s infinite alternate;
+}
+
+/* Burbuja de dialogo */
+.dog-bubble {
+    background-color: white;
+    color: black;
+    padding: 8px 12px;
+    border-radius: 10px;
+    font-size: 0.8rem;
+    font-weight: bold;
+    position: relative;
+    display: inline-block;
+    border: 2px solid #000;
+
+    /* Protecciones para que no se rompa */
+    max-width: 90%;
+    word-wrap: break-word;
+    text-align: center;
+}
+
+/* El triangulito negro de la burbuja */
+.dog-bubble::after {
+    content: '';
+    position: absolute;
+    bottom: -6px;
+    left: 50%;
+    transform: translateX(-50%);
+    border-width: 6px 6px 0;
+    border-style: solid;
+    border-color: #000 transparent transparent transparent;
+}
+
+/* El triangulito blanco de la burbuja (para tapar la linea) */
+.dog-bubble::before {
+    content: '';
+    position: absolute;
+    bottom: -3px;
+    left: 50%;
+    transform: translateX(-50%);
+    border-width: 6px 6px 0;
+    border-style: solid;
+    border-color: #fff transparent transparent transparent;
+    z-index: 1;
+}
+
+/* Animación del salto */
+@keyframes bounce {
+    from {
+        transform: translateY(0);
+    }
+
+    to {
+        transform: translateY(-5px);
+    }
+}

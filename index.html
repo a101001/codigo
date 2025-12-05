@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SICA - Control de Calidad</title>
+
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body class="bg-light">
+    <div class="d-flex" id="wrapper">
+      <div
+        class="bg-dark text-white p-4 d-flex flex-column"
+        style="min-width: 320px; height: 100vh; overflow-y: auto"
+      >
+        <div class="text-center mb-4 border-bottom pb-3">
+          <h3 class="fw-bold">SICA</h3>
+          <small class="text-white-50">Sistema Matricial</small>
+        </div>
+
+        <div class="mb-4">
+          <h6 class="text-uppercase text-primary small fw-bold">
+            Vector Ideal (Estandar)
+          </h6>
+
+          <label class="form-label small">Largo (mm)</label>
+          <input
+            type="number"
+            id="inputLargo"
+            class="form-control form-control-sm mb-2"
+            value="100.0"
+            step="0.1"
+          />
+
+          <label class="form-label small">Ancho (mm)</label>
+          <input
+            type="number"
+            id="inputAncho"
+            class="form-control form-control-sm mb-2"
+            value="25.0"
+            step="0.1"
+          />
+
+          <label class="form-label small">Peso (g)</label>
+          <input
+            type="number"
+            id="inputPeso"
+            class="form-control form-control-sm"
+            value="50.0"
+            step="0.1"
+          />
+        </div>
+
+        <div class="mb-4">
+          <h6 class="text-uppercase text-warning small fw-bold">
+            Mediciones de Piezas (L, A, P)
+          </h6>
+
+          <div>
+            <span class="form-label small">Piezas a Analizar</span>
+            <input
+              type="number"
+              style="max-width: 50px; padding: 0px"
+              id="inputCantidad"
+              class="form-control-sm mb-3"
+              value="10"
+              min="1"
+              onchange="generarCamposDePiezas()"
+            />
+          </div>
+
+          <div
+            class="overflow-y-scroll"
+            style="height: 340px; overflow-x: hidden"
+            id="contenedorPiezas"
+          ></div>
+
+          <label class="form-label small mt-3">Tolerancia Max (%)</label>
+          <input
+            type="number"
+            id="inputTolerancia"
+            class="form-control form-control-sm mb-2"
+            value="15"
+          />
+
+          <label class="form-label small">Cargar Datos (TXT/CSV)</label>
+          <input
+            type="file"
+            id="inputArchivo"
+            class="form-control form-control-sm mb-2"
+            accept=".txt,.csv"
+            onchange="manejarArchivo()"
+          />
+        </div>
+
+        <button
+          class="btn btn-primary w-100 fw-bold py-2 mt-2 shadow"
+          onclick="ejecutarAnalisis()"
+        >
+          ANALIZAR DATOS
+        </button>
+
+        <div class="dog-container mt-auto text-center pt-4">
+          <div class="dog-bubble mb-2">¡Carga el archivo de medidas!</div>
+          <img src="Annoying_Dog.webp" alt="Perro Molesto" class="dog-img" />
+        </div>
+      </div>
+      <div class="container-fluid p-4" style="height: 100vh; overflow-y: auto">
+        <div class="row g-3 mb-4">
+          <div class="col-md-3">
+            <div
+              class="card border-0 shadow-sm h-100 text-center py-3"
+              id="cardEstado"
+            >
+              <div class="card-body">
+                <h6 class="text-muted text-uppercase small">Estado del Lote</h6>
+                <h4 class="fw-bold mb-0" id="txtEstado">ESPERANDO...</h4>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="card border-0 shadow-sm h-100 text-center py-3">
+              <div class="card-body">
+                <h6 class="text-muted text-uppercase small">Total Piezas</h6>
+                <h2 class="fw-bold text-dark mb-0" id="valTotal">0</h2>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="card border-0 shadow-sm h-100 text-center py-3">
+              <div class="card-body">
+                <h6 class="text-muted text-uppercase small">Defectuosas</h6>
+                <h2 class="fw-bold text-danger mb-0" id="valDefectos">0</h2>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="card border-0 shadow-sm h-100 text-center py-3">
+              <div class="card-body">
+                <h6 class="text-muted text-uppercase small">Error Promedio</h6>
+                <h2 class="fw-bold text-warning mb-0" id="valError">0.00</h2>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row g-3 mb-4">
+          <div class="col-md-8">
+            <div class="card border-0 shadow-sm h-100">
+              <div class="card-header bg-white fw-bold">
+                Tendencia Historica (Sucesiones)
+              </div>
+              <div class="card-body">
+                <div style="height: 250px">
+                  <canvas id="chartSucesion"></canvas>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-4">
+            <div class="card border-0 shadow-sm h-100">
+              <div class="card-header bg-white fw-bold">
+                Comparacion (Vectores)
+              </div>
+              <div class="card-body">
+                <div style="height: 250px">
+                  <canvas id="chartVector"></canvas>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card border-0 shadow-sm">
+          <div class="card-header bg-white fw-bold">
+            Detalle Matricial del Lote
+          </div>
+          <div class="card-body p-0">
+            <div class="table-responsive" style="max-height: 300px">
+              <table
+                class="table table-hover table-striped mb-0 text-center align-middle"
+              >
+                <thead class="table-light sticky-top">
+                  <tr>
+                    <th>ID</th>
+                    <th>Largo</th>
+                    <th>Ancho</th>
+                    <th>Peso</th>
+                    <th>Error Calc.</th>
+                    <th>Estado</th>
+                  </tr>
+                </thead>
+                <tbody id="tablaBody"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="script.js"></script>
+  </body>
+</html>
